@@ -103,3 +103,9 @@ nbactions.xml
 
 # Maven build dir
 target
+
+# Ignore some project folders during docker build
+devops
+docs
+juju
+various
