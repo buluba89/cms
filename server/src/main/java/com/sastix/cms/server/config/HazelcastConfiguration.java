@@ -103,6 +103,15 @@ public class HazelcastConfiguration {
     @Value("${hazelcast.config.map.customTimeToLiveSeconds}")
     private int customTimeToLiveSeconds;
 
+    @Value("${hazelcast.config.network.kubernetes.enabled}")
+    public boolean kubernetesEnabled;
+
+    @Value("${hazelcast.config.network.kubernetes.namespace}")
+    public String kubernetesNamespace;
+
+    @Value("${hazelcast.config.network.kubernetes.service.name}")
+    public String kubernetesServiceName;
+
     @Autowired
     HazelcastProperties hazelcastProperties;
 
@@ -123,7 +132,8 @@ public class HazelcastConfiguration {
                 tcpIpEnabled,tcpIpMembers,
                 mapName,backupCount,maxIdleSeconds,
                 timeToLiveSeconds,maxSize,evictionPercentage,readBackupData,
-                evictionPolicy,mergePolicy, customTimeToLiveSeconds);
+                evictionPolicy,mergePolicy, customTimeToLiveSeconds,
+                kubernetesEnabled, kubernetesNamespace, kubernetesServiceName);
         return properties;
     }
 

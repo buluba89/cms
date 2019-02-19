@@ -60,6 +60,13 @@ public class HazelcastServiceImpl implements HazelcastService{
             multicastConfig.setMulticastTimeoutSeconds(properties.getMulticastTimeout());
             multicastConfig.setMulticastTimeToLive(properties.getMulticastTTL());
 
+            // creates and sets kubernetes configuration
+            KubernetesConfig kubernetesConfig = new KubernetesConfig();
+            kubernetesConfig.setEnabled(properties.isKubernetesEnabled())
+                            .setProperty("namespace", properties.getKubernetesNamespace())
+                            .setProperty("service-name", properties.getKubernetesServiceName());
+
+
             // creates and sets tcp/ip configuration
             TcpIpConfig tcpIpConfig = new TcpIpConfig();
             tcpIpConfig.setEnabled(properties.isTcpIpEnabled());
@@ -69,6 +76,7 @@ public class HazelcastServiceImpl implements HazelcastService{
             JoinConfig joinConfig = new JoinConfig();
             joinConfig.setMulticastConfig(multicastConfig);
             joinConfig.setTcpIpConfig(tcpIpConfig);
+            joinConfig.setKubernetesConfig(kubernetesConfig);
 
             // sets the network configuration
             networkConfig.setJoin(joinConfig);

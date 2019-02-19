@@ -68,6 +68,12 @@ public class HazelcastProperties {
 
     public int customTimeToLiveSeconds;
 
+    public boolean kubernetesEnabled;
+
+    public String kubernetesNamespace;
+
+    public String kubernetesServiceName;
+
     public HazelcastProperties() {
     }
 
@@ -76,7 +82,8 @@ public class HazelcastProperties {
                                String multicastGroup, int multicastPort, int multicastTimeout, int multicastTTL, boolean tcpIpEnabled,
                                List<String> tcpIpMembers, String mapName, int backupCount, int maxIdleSeconds, int timeToLiveSeconds,
                                int maxSize, int evictionPercentage, boolean readBackupData, String evictionPolicy, String mergePolicy,
-                               int customTimeToLiveSeconds) {
+                               int customTimeToLiveSeconds, boolean kubernetesEnabled, String kubernetesNamespace,
+                               String kubernetesServiceName) {
         this.configurationName = configurationName;
         this.groupName = groupName;
         this.groupPass = groupPass;
@@ -101,6 +108,9 @@ public class HazelcastProperties {
         this.evictionPolicy = evictionPolicy;
         this.mergePolicy = mergePolicy;
         this.customTimeToLiveSeconds = customTimeToLiveSeconds;
+        this.kubernetesEnabled = kubernetesEnabled;
+        this.kubernetesNamespace = kubernetesNamespace;
+        this.kubernetesServiceName = kubernetesServiceName;
     }
 
     public String getConfigurationName() {
@@ -293,6 +303,30 @@ public class HazelcastProperties {
 
     public void setCustomTimeToLiveSeconds(int customTimeToLiveSeconds) {
         this.customTimeToLiveSeconds = customTimeToLiveSeconds;
+    }
+
+    public boolean isKubernetesEnabled() {
+        return kubernetesEnabled;
+    }
+
+    public void setKubernetesEnabled(boolean kubernetesEnabled) {
+        this.kubernetesEnabled = kubernetesEnabled;
+    }
+
+    public String getKubernetesNamespace() {
+        return kubernetesNamespace;
+    }
+
+    public void setKubernetesNamespace(String kubernetesNamespace) {
+        this.kubernetesNamespace = kubernetesNamespace;
+    }
+
+    public String getKubernetesServiceName() {
+        return kubernetesServiceName;
+    }
+
+    public void setKubernetesServiceName(String kubernetesServiceName) {
+        this.kubernetesServiceName = kubernetesServiceName;
     }
 
 }
