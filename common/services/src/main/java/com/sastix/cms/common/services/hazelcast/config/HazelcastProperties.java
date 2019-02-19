@@ -74,6 +74,10 @@ public class HazelcastProperties {
 
     public String kubernetesServiceName;
 
+    public boolean isClient;
+
+    public String serverAddress;
+
     public HazelcastProperties() {
     }
 
@@ -83,7 +87,7 @@ public class HazelcastProperties {
                                List<String> tcpIpMembers, String mapName, int backupCount, int maxIdleSeconds, int timeToLiveSeconds,
                                int maxSize, int evictionPercentage, boolean readBackupData, String evictionPolicy, String mergePolicy,
                                int customTimeToLiveSeconds, boolean kubernetesEnabled, String kubernetesNamespace,
-                               String kubernetesServiceName) {
+                               String kubernetesServiceName, boolean isClient, String serverAddress) {
         this.configurationName = configurationName;
         this.groupName = groupName;
         this.groupPass = groupPass;
@@ -111,6 +115,8 @@ public class HazelcastProperties {
         this.kubernetesEnabled = kubernetesEnabled;
         this.kubernetesNamespace = kubernetesNamespace;
         this.kubernetesServiceName = kubernetesServiceName;
+        this.isClient = isClient;
+        this.serverAddress = serverAddress;
     }
 
     public String getConfigurationName() {
@@ -329,4 +335,19 @@ public class HazelcastProperties {
         this.kubernetesServiceName = kubernetesServiceName;
     }
 
+    public boolean isClient() {
+        return isClient;
+    }
+
+    public void setClient(boolean client) {
+        isClient = client;
+    }
+
+    public String getServerAddress() {
+        return serverAddress;
+    }
+
+    public void setServerAddress(String serverAddress) {
+        this.serverAddress = serverAddress;
+    }
 }

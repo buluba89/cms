@@ -112,6 +112,12 @@ public class HazelcastConfiguration {
     @Value("${hazelcast.config.network.kubernetes.service.name}")
     public String kubernetesServiceName;
 
+    @Value("${hazelcast.config.client}")
+    public boolean isClient;
+
+    @Value("${hazelcast.config.client.address}")
+    public String serverAddress;
+
     @Autowired
     HazelcastProperties hazelcastProperties;
 
@@ -133,7 +139,8 @@ public class HazelcastConfiguration {
                 mapName,backupCount,maxIdleSeconds,
                 timeToLiveSeconds,maxSize,evictionPercentage,readBackupData,
                 evictionPolicy,mergePolicy, customTimeToLiveSeconds,
-                kubernetesEnabled, kubernetesNamespace, kubernetesServiceName);
+                kubernetesEnabled, kubernetesNamespace, kubernetesServiceName,
+                isClient, serverAddress);
         return properties;
     }
 

@@ -16,6 +16,8 @@
 
 package com.sastix.cms.common.services.hazelcast;
 
+import com.hazelcast.client.HazelcastClient;
+import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.config.*;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
@@ -37,6 +39,16 @@ public class HazelcastServiceImpl implements HazelcastService{
 
     @Override
     public HazelcastInstance hazelcastInstance() {
+        // Create client instance
+        if (properties.isClient()) {
+            GroupConfig groupConfig = new GroupConfig(properties.getGroupName(), properties.getGroupPass());
+
+            ClientConfig config = new ClientConfig();
+            config.setGroupConfig(groupConfig);
+            config.getNetworkConfig().addAddress(properties.getServerAddress());
+            return HazelcastClient.newHazelcastClient(config);
+        }
+
         // retrieves the hazelcast instance
         HazelcastInstance hazelcastInstance = Hazelcast.getHazelcastInstanceByName(properties.getConfigurationName());
 
@@ -119,4 +131,5 @@ public class HazelcastServiceImpl implements HazelcastService{
 
         return hazelcastInstance;
     }
+
 }
