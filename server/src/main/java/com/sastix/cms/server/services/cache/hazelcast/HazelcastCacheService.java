@@ -39,6 +39,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.cache.Cache;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -57,7 +58,7 @@ public class HazelcastCacheService implements CacheService, BeanFactoryAware {
 
     private static final String DEFAULT_HAZELCAST_MANAGER = "hazelcastDistributedCacheManager";
 
-    private ConcurrentMap<String, CacheDTO> cache;
+    private Cache<String, CacheDTO> cache;
     DistributedCacheManager cm;
 
     @Value("${cms.cache.manager}")
@@ -71,7 +72,7 @@ public class HazelcastCacheService implements CacheService, BeanFactoryAware {
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
         try {
-            this.cache = (ConcurrentMap<String, CacheDTO>) beanFactory.getBean(Constants.DEFAULT_CACHE_NAME);
+            this.cache = (Cache<String, CacheDTO>) beanFactory.getBean(Constants.DEFAULT_CACHE_NAME);
             this.cacheManager = (DistributedCacheManager) beanFactory.getBean(cacheManagerBean);
         } catch (NoSuchBeanDefinitionException noSuchBeanDefinitionException) {
             /* Creating cache on the fly.
@@ -125,7 +126,7 @@ public class HazelcastCacheService implements CacheService, BeanFactoryAware {
         String cacheRegion = queryCacheDTO.getCacheRegion();
         CacheDTO cacheDTO;
         if (!StringUtils.isEmpty(cacheRegion)) { // GET from cache region
-            ConcurrentMap<String, CacheDTO> cMap = cm.getCache(cacheRegion);
+            Cache<String, CacheDTO> cMap = cm.getCache(cacheRegion);
             cacheDTO = cMap.get(cacheKey);
         } else {// GET from default cache
             cacheDTO = this.cache.get(cacheKey);
@@ -160,7 +161,7 @@ public class HazelcastCacheService implements CacheService, BeanFactoryAware {
         }
 
         if (!StringUtils.isEmpty(cacheRegion)) {
-            ConcurrentMap<String, String> cMap = cm.getCache(cacheRegion);
+            Cache<String, String> cMap = cm.getCache(cacheRegion);
             if (cMap.containsKey(cacheKey)) {
                 cMap.remove(cacheKey);
             }else {
@@ -182,11 +183,11 @@ public class HazelcastCacheService implements CacheService, BeanFactoryAware {
         String cacheRegion = removeCacheDTO != null ? removeCacheDTO.getCacheRegion() : null;
 
         if (!StringUtils.isEmpty(cacheRegion)) {//clear specific region
-            ConcurrentMap<String, IMap> regionCacheMap = (ConcurrentMap<String, IMap>) cm.getCaches().get(cacheRegion);
+            ConcurrentMap<String, Cache> regionCacheMap = (ConcurrentMap<String, Cache>) cm.getCaches().get(cacheRegion);
             if (regionCacheMap == null) {
                 throw new DataNotFound("The supplied region was not available – did not exist");
             } else {
-                ConcurrentMap<String, CacheDTO> cMap = cm.getCache(cacheRegion);
+                Cache<String, CacheDTO> cMap = cm.getCache(cacheRegion);
                 cMap.clear();
             }
         }else{
@@ -208,8 +209,8 @@ public class HazelcastCacheService implements CacheService, BeanFactoryAware {
     @Override
     public void clearCacheExcept(List<String> cacheRegions) {
         LOG.info("HazelcastCacheService->CLEAR_ALL_CACHE_REGIONS_AND_MAIN_CACHE Except for specific values");
-        ConcurrentMap<String, IMap> caches = cm.getCaches();
-        for (Map.Entry<String, IMap> entry : caches.entrySet()) {
+        ConcurrentMap<String, Cache> caches = cm.getCaches();
+        for (Map.Entry<String, Cache> entry : caches.entrySet()) {
             String region = entry.getValue().getName();
             boolean exists = cacheRegions.stream().filter(s->region.contains(s)).count()>0;
             if(!exists) {

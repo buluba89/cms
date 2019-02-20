@@ -19,6 +19,7 @@ package com.sastix.cms.server.services.cache.manager;
 import com.hazelcast.core.IdGenerator;
 import java.util.List;
 import java.util.concurrent.ConcurrentMap;
+import javax.cache.Cache;
 
 public interface DistributedCacheManager {
 
@@ -30,7 +31,7 @@ public interface DistributedCacheManager {
      *
      * @return distributed cache.
      */
-    <K, V> ConcurrentMap<K, V> getCache(final String cacheName);
+    <K, V> Cache<K, V> getCache(final String cacheName);
 
     /**
      * Get all caches.

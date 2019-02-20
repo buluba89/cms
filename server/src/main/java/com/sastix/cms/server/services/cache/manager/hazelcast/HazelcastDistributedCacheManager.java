@@ -16,6 +16,7 @@
 
 package com.sastix.cms.server.services.cache.manager.hazelcast;
 
+import com.hazelcast.cache.ICache;
 import com.hazelcast.core.DistributedObject;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
@@ -37,7 +38,7 @@ import java.util.concurrent.ConcurrentMap;
 @Service
 public class HazelcastDistributedCacheManager implements DistributedCacheManager {
 
-    private volatile ConcurrentMap<String, IMap> caches = new ConcurrentHashMap<>();
+    private volatile ConcurrentMap<String, ICache> caches = new ConcurrentHashMap<>();
 
     @Autowired
     @Qualifier(value = "hazelcastInstance")
@@ -47,14 +48,14 @@ public class HazelcastDistributedCacheManager implements DistributedCacheManager
 
     @Override
     @SuppressWarnings("unchecked")
-    public <K, V> IMap<K, V> getCache(String cacheName) {
+    public <K, V> ICache<K, V> getCache(String cacheName) {
         if (caches.get(cacheName) == null) {
             synchronized (this) {
                 if (caches.get(cacheName) == null) {
-                    final IMap<K, V> map = this.hazelcastInstance.getMap(cacheName);
-                    caches.putIfAbsent(cacheName, map);
+                    final ICache<K, V> cache = this.hazelcastInstance.getCacheManager().getCache("default");
+                    caches.putIfAbsent(cacheName, cache);
 
-                    return map;
+                    return cache;
                 }
             }
         }
@@ -62,7 +63,7 @@ public class HazelcastDistributedCacheManager implements DistributedCacheManager
         return caches.get(cacheName);
     }
 
-    public ConcurrentMap<String, IMap> getCaches() {
+    public ConcurrentMap<String, ICache> getCaches() {
         return caches;
     }
 
