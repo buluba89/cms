@@ -22,6 +22,7 @@ import com.hazelcast.config.*;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.sastix.cms.common.services.hazelcast.config.HazelcastProperties;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,12 +42,7 @@ public class HazelcastServiceImpl implements HazelcastService{
     public HazelcastInstance hazelcastInstance() {
         // Create client instance
         if (properties.isClient()) {
-            GroupConfig groupConfig = new GroupConfig(properties.getGroupName(), properties.getGroupPass());
-
-            ClientConfig config = new ClientConfig();
-            config.setGroupConfig(groupConfig);
-            config.getNetworkConfig().addAddress(properties.getServerAddress());
-            return HazelcastClient.newHazelcastClient(config);
+            return createClientInstance();
         }
 
         // retrieves the hazelcast instance
@@ -132,4 +128,17 @@ public class HazelcastServiceImpl implements HazelcastService{
         return hazelcastInstance;
     }
 
+    private HazelcastInstance createClientInstance() {
+        ClientConfig config = new ClientConfig();
+        if (properties.isKubernetesEnabled()) {
+            KubernetesConfig kubernetesConfig = config.getNetworkConfig().getKubernetesConfig();
+            kubernetesConfig.setEnabled(true).setProperty("namespace", properties.getKubernetesNamespace());
+            kubernetesConfig.setProperty("service-name", properties.getKubernetesServiceName());
+        } else {
+            GroupConfig groupConfig = new GroupConfig(properties.getGroupName(), properties.getGroupPass());
+            config.setGroupConfig(groupConfig);
+            config.getNetworkConfig().addAddress(properties.getServerAddress());
+        }
+        return HazelcastClient.newHazelcastClient(config);
+    }
 }

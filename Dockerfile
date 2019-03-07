@@ -21,8 +21,18 @@ RUN cd /build  && mvn install -DskipTests
 #------------- Run env --------------
 FROM java:openjdk-8-jdk-alpine as webapp
 
+# Define enviroment variables
+ENV JAVA_XMX=256m
+ENV SASTIX_CMS_SERVER_PORT=9082
+
 COPY --from=build /build/server/target/cms-server-*.jar /app.jar
 
 WORKDIR /opt/csp
 RUN mkdir -p /opt/sastixcms
 
+EXPOSE 9082
+
+CMD java \
+    -Xmx$JAVA_XMX \
+    $JAVA_EXTRA_ARGS \
+    -jar /app.jar

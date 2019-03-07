@@ -112,7 +112,7 @@ public class HazelcastConfiguration {
     @Value("${hazelcast.config.network.kubernetes.service.name}")
     public String kubernetesServiceName;
 
-    @Value("${hazelcast.config.client}")
+    @Value("${hazelcast.config.client.enabled}")
     public boolean isClient;
 
     @Value("${hazelcast.config.client.address}")
