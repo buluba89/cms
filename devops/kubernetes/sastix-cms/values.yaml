@@ -1,0 +1,39 @@
+image:
+  registry: localhost:32000
+  name: cms
+  tag: latest
+
+labels:
+  component: sastix-cms-app
+
+storage:
+  size: 500Mi
+
+
+# ------------ Dependencies configuration -------------
+
+# See https://github.com/helm/charts/tree/master/stable/mariadb for more info
+mariadb:
+  rootUser:
+    password: sastixcms
+    forcePassword: true
+  db:
+    user: sastixcms
+    password: sastixcms
+    forcePassword: true
+  replication:
+    enabled: false
+  initdbScripts:
+    lykio_init.sql: |-
+      CREATE DATABASE `sastix_cms_docker` /*!40100 DEFAULT CHARACTER SET utf8 */;
+      GRANT ALL PRIVILEGES ON *.* TO 'sastixcms'@'%';
+
+# See https://github.com/helm/charts/tree/master/stable/hazelcast for more info
+hazelcast:
+  image:
+    tag: "3.11.2"
+  cluster:
+    memberCount: 2
+  mancenter:
+    service:
+      type: ClusterIP
