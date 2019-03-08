@@ -12,7 +12,7 @@ ADD ./server/pom.xml /build/server/pom.xml
 ADD ./client/pom.xml /build/client/pom.xml
 ADD ./integration-tests/pom.xml /build/integration-tests/pom.xml
 # Download dependencies
-RUN cd /build && mvn dependency:go-offline -B -DskipTests --fail-never
+RUN cd /build && mvn verify clean --fail-never
 
 # Add all and build
 ADD . /build
