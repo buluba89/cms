@@ -11,7 +11,7 @@ data:
     hazelcast.config.network.kubernetes.namespace={{ $.Release.Namespace }}
     hazelcast.config.network.kubernetes.service.name={{ $.Release.Name }}-hazelcast
     # Security config
-    security.user.name=admin
+    security.user.name=${SASTIX_CMS_ADMIN_USER}
     security.user.password=${SASTIX_CMS_ADMIN_PASSWORD}
     # Prometheus actuator
     management.endpoint.metrics.enabled=true

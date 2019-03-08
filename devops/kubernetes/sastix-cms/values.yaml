@@ -9,6 +9,20 @@ labels:
 storage:
   size: 500Mi
 
+resources:
+  requests:
+    memory: "128Mi"
+    cpu: "500m"
+  limits:
+    memory: "1024Mi"
+    cpu: "2000m"
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 3
+  targetCpuUtilization: 100
+
 # ------------ Dependencies configuration -------------
 
 # See https://github.com/helm/charts/tree/master/stable/mariadb for more info
