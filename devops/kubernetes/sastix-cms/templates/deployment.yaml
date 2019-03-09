@@ -23,10 +23,6 @@ spec:
         chart:  {{ template "sastix-cms.chart" . }}
         release: "{{ .Release.Name }}"
         heritage: "{{ .Release.Service }}"
-      annotations:
-        prometheus.io/scrape: 'true'
-        prometheus.io/port: '9082'
-        prometheus.io/path: '/prometheus'
 {{ if .Values.labels }}
 {{ toYaml .Values.labels | indent 8 }}
 {{ end }}
