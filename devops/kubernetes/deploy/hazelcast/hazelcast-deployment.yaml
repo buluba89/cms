@@ -6,7 +6,7 @@ metadata:
     app: hazelcast
 spec:
   replicas: 2
-  serviceName: hazelcast-service
+  serviceName: hazelcast-servicesastix-cms
   selector:
     matchLabels:
       app: hazelcast
